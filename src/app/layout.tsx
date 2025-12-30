@@ -1,6 +1,14 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Button } from "@/components/ui/button";
+import Navbar from "@/components/navbar/page";
+import Footer from "@/components/footer/page";
+import { Toaster } from "react-hot-toast";
+import CartContextProvider from "@/components/context/cartContext";
+import MySession from "@/components/MySessionProvider/MySession";
+import WishlistContextProvider from "@/components/context/wishListContext";
+import AddressContextProvider from "@/components/context/addrssesContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,7 +35,20 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <MySession>
+          <CartContextProvider>
+            <WishlistContextProvider>
+              <AddressContextProvider>
+                <Navbar />
+                <div className="container mx-auto">
+                  {children}
+                  <Toaster />
+                </div>
+                <Footer />
+              </AddressContextProvider>
+            </WishlistContextProvider>
+          </CartContextProvider>
+        </MySession>
       </body>
     </html>
   );
