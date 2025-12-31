@@ -24,7 +24,7 @@ export default function Cart() {
   const [updatingId, setUpdatingId] = useState<null | string>(null)
   const [clearing, setClearing] = useState(false)
 
-
+// API_URL=https://ecommerce.routemisr.com/api/v1
   //Delete
   async function removeCartItem(productId: string) {
     setRemovingId(productId)
