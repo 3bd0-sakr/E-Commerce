@@ -3,14 +3,14 @@ import ShopIcon from "../shopicon/page";
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-100 py-10 px-6 mt-15">
+    <footer className="mt-16 border-t bg-gray-950 px-6 py-10 text-white">
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10 items-center">
         <div>
           <div className="flex items-center mb-3">
             <span><ShopIcon/></span>
             <h2 className="text-2xl font-semibold">ShopMart</h2>
           </div>
-          <p className="text-gray-600 text-sm leading-6">
+          <p className="text-gray-400 text-sm leading-6">
             Your one-stop destination for the latest technology, fashion, and lifestyle products.
             Quality guaranteed with fast shipping and excellent customer service.
           </p>
@@ -19,7 +19,7 @@ export default function Footer() {
         {/* Shop */}
         <div>
           <h3 className="font-semibold text-lg mb-3">SHOP</h3>
-          <ul className="text-gray-600 space-y-2 text-sm">
+          <ul className="text-gray-400 space-y-2 text-sm">
             <li>Electronics</li>
             <li>Fashion</li>
             <li>Home & Garden</li>
@@ -30,7 +30,7 @@ export default function Footer() {
         {/* Customer Service */}
         <div>
           <h3 className="font-semibold text-lg mb-3">CUSTOMER SERVICE</h3>
-          <ul className="text-gray-600 space-y-2 text-sm">
+          <ul className="text-gray-400 space-y-2 text-sm">
             <li>Contact Us</li>
             <li>Help Center</li>
             <li>Track Your Order</li>
@@ -41,7 +41,7 @@ export default function Footer() {
         {/* Policies */}
         <div>
           <h3 className="font-semibold text-lg mb-3">POLICIES</h3>
-          <ul className="text-gray-600 space-y-2 text-sm">
+          <ul className="text-gray-400 space-y-2 text-sm">
             <li>Privacy Policy</li>
             <li>Terms of Service</li>
             <li>Cookie Policy</li>

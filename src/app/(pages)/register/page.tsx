@@ -75,8 +75,8 @@ export default function Register() {
         form.reset()
         router.push('/login')
       }
-    } catch (error: any) {
-      setErrorMessage(error.message || 'Something went wrong')
+    } catch (error: unknown) {
+      setErrorMessage(error instanceof Error ? error.message : 'Something went wrong')
     } finally {
       setIsLoading(false)
     }

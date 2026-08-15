@@ -1,54 +1,52 @@
 'use client'
+
 import React, { useContext, useState } from 'react'
-import { CardFooter } from '../ui/card'
-import { Button } from '../ui/button'
 import { HeartIcon, Loader, ShoppingCart } from 'lucide-react'
-import toast from 'react-hot-toast'
-import { CartContext } from '../context/cartContext'
-import { AddToCartAction } from '@/app/(pages)/products/_action/addToCart.action'
-import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { WishlistContext } from '../context/wishListContext'
+import { useSession } from 'next-auth/react'
+import toast from 'react-hot-toast'
+import { AddToCartAction } from '@/app/(pages)/products/_action/addToCart.action'
 import { AddToWishListAction } from '@/app/(pages)/products/_action/addToWishList.action'
+import { CartContext } from '../context/cartContext'
+import { WishlistContext } from '../context/wishListContext'
+import { Button } from '../ui/button'
+import { CardFooter } from '../ui/card'
 
 export default function AddToCart({ productId }: { productId: string }) {
-    const { getCart, setCartData } = useContext(CartContext)
-    const [loading, setLoading] = useState(false)
+    const { setCartData } = useContext(CartContext)
     const { getWishlist } = useContext(WishlistContext)
+    const [loading, setLoading] = useState(false)
     const [wishlistLoading, setWishlistLoading] = useState(false)
     const session = useSession()
     const router = useRouter()
 
     async function addProductToCart() {
-        if (session.status == 'authenticated') {
-            setLoading(true)
-            const data = await AddToCartAction(productId)
-            // const data = await response.json()
-            data.status == 'success' && toast.success('product added successfuly')
-            setCartData(data)
-            setLoading(false)
-        } else {
+        if (session.status !== 'authenticated') {
             router.push('/login')
+            return
         }
+
+        setLoading(true)
+        const data = await AddToCartAction(productId)
+        if (data.status == 'success') toast.success('Product added successfully')
+        setCartData(data)
+        setLoading(false)
     }
 
     async function addProductToWishlist() {
-        if (session.status === 'authenticated') {
-            setWishlistLoading(true)
-
-            const data = await AddToWishListAction(productId)
-
-            if (data.status === 'success') {
-                toast.success('product added to wishlist ❤️')
-                getWishlist()
-            }
-
-            setWishlistLoading(false)
-        } else {
+        if (session.status !== 'authenticated') {
             router.push('/login')
+            return
         }
-    }
 
+        setWishlistLoading(true)
+        const data = await AddToWishListAction(productId)
+        if (data.status === 'success') {
+            toast.success('Product added to wishlist')
+            getWishlist()
+        }
+        setWishlistLoading(false)
+    }
 
     return (
         <CardFooter className="flex gap-1.5">
@@ -59,8 +57,10 @@ export default function AddToCart({ productId }: { productId: string }) {
 
             <Button variant="outline" size="icon" onClick={addProductToWishlist} className="cursor-pointer">
                 {wishlistLoading ? (
-                    <Loader className="animate-spin" />) : (
-                    <HeartIcon className="text-red-500" />)}
+                    <Loader className="animate-spin" />
+                ) : (
+                    <HeartIcon className="text-red-500" />
+                )}
             </Button>
         </CardFooter>
     )

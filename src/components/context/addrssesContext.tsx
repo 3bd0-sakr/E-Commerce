@@ -85,7 +85,10 @@ export default function AddressContextProvider({ children }: { children: ReactNo
     }
 
     useEffect(() => {
-        getAddresses();
+        const timer = window.setTimeout(() => {
+            getAddresses();
+        }, 0);
+        return () => window.clearTimeout(timer);
     }, []);
 
     return (

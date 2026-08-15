@@ -1,36 +1,36 @@
 "use client";
 import { CartContext } from '@/components/context/cartContext'
 import OrderItemsDropdown from '@/components/dropItem/page';
-import { Button } from '@/components/ui/button';
+import { Order } from '@/interfaces';
 import { Loader } from 'lucide-react';
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 
 export default function AllOrders() {
     const { ownerId } = useContext(CartContext)
-    const [isorders, setisorders] = useState<any[]>([])
+    const [isorders, setisorders] = useState<Order[]>([])
     const [isLoading, setIsLoading] = useState(false)
 
 
-    async function getorders() {
+    const getorders = useCallback(async function getorders() {
         if (!ownerId) return
         setIsLoading(true)
         try {
             const response = await fetch('https://ecommerce.routemisr.com/api/v1/orders/user/' + ownerId)
             const data = await response.json()
             setisorders(Array.isArray(data) ? data : [])
-            console.log("ORDERS:", data)
         } catch (error) {
             console.error(error)
             setisorders([])
         }
         setIsLoading(false)
-    }
+    }, [ownerId])
 
     useEffect(() => {
-        const owner = ownerId
-        console.log(owner);
-        if (ownerId) getorders()
-    }, [ownerId])
+        const timer = window.setTimeout(() => {
+            if (ownerId) void getorders()
+        }, 0);
+        return () => window.clearTimeout(timer);
+    }, [getorders, ownerId])
 
     return (
         <div>
@@ -39,7 +39,7 @@ export default function AllOrders() {
             {isLoading && <p className='min-h-screen flex justify-center items-center text-6xl'><Loader className='animate-spin text-6xl' /> </p>}
             {!isLoading && isorders.length === 0 && <p>No Orders Found</p>}
 
-            {Array.isArray(isorders) && isorders.map((order: any) => (
+            {Array.isArray(isorders) && isorders.map((order) => (
                 <div key={order._id} className='shadow rounded-2xl my-4 p-6'>
                     <h2>Order # {order._id}</h2>
                     <p>Order Date: {new Date(order.createdAt).toLocaleString()}</p>
@@ -51,8 +51,8 @@ export default function AllOrders() {
 
                     <div className='mt-2'>
                         <h3>Shipping Address</h3>
-                        <p>City: {order.shippingAddress.city}</p>
-                        <p>Phone: {order.shippingAddress.phone}</p>
+                        <p>City: {order.shippingAddress?.city || "N/A"}</p>
+                        <p>Phone: {order.shippingAddress?.phone || "N/A"}</p>
                         <OrderItemsDropdown order={order.cartItems} />
                     </div>
                 </div>

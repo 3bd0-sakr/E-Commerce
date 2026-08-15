@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Trash2, ShoppingCart, Loader } from "lucide-react";
+import { ShoppingCart, Loader } from "lucide-react";
 import Link from "next/link";
 import { useContext, useState } from "react";
 import Loading from "@/app/loading";

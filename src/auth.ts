@@ -21,7 +21,6 @@ export const authOptions: AuthOptions = {
                     headers: { 'content-type': 'application/json' }
                 })
                 const payload: SuccessLoginResponse | FaildLoginResponse = await response.json()
-                console.log(payload);
 
                 if ('token' in payload) {
                     return {
@@ -38,8 +37,8 @@ export const authOptions: AuthOptions = {
     callbacks: {
         jwt: ({ token, user }) => {
           if(user){
-              token.user = user.user,
-                token.token = user.token
+              token.user = user.user
+              token.token = user.token
           }
             return token
         },

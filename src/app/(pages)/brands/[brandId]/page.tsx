@@ -14,17 +14,18 @@ import AddToCart from '@/components/addToCart/page';
 import { Params } from 'next/dist/server/request/params';
 import { Button } from '@/components/ui/button';
 
+export const dynamic = 'force-dynamic'
 
 //Api
 export default async function ProductsCategoey({ params }: { params: Params }) {
-    let { brandId } = await params
+    const { brandId } = await params
     const response = await fetch('https://ecommerce.routemisr.com/api/v1/products?brand=' + brandId)
     const { data: products }: { data: ProductI[] } = await response.json()
 
     if (!products || products.length === 0) {
         return (
             <div className="flex flex-col items-center justify-center mt-20 gap-4 min-h-[50vh]">
-                <h2 className="text-xl font-semibold text-gray-600">There are no products in this brand.😔</h2>
+                <h2 className="text-xl font-semibold text-gray-600 dark:text-gray-300">There are no products in this brand.😔</h2>
                 <Link href="/brands" className="text-primary underline hover:opacity-80">
                     <Button className='cursor-pointer'>Return to all brands</Button>
                 </Link>
@@ -34,15 +35,17 @@ export default async function ProductsCategoey({ params }: { params: Params }) {
     return <>
 
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mt-4">
+        <div className="grid grid-cols-1 gap-5 py-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             {products.map((product) =>
                 <div key={product.id}>
-                    <Card>
+                    <Card className="h-full overflow-hidden border-0 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl dark:bg-gray-900">
                         <Link href={'/products/' + product.id}>
                             <CardHeader>
-                                <Image src={product.imageCover} className='w-full' width={200} height={150} alt='' />
-                                <CardDescription>{product.brand.name}</CardDescription>
-                                <CardTitle>{product.title.split(" ", 2).join(' ')}</CardTitle>
+                                <div className="rounded-2xl bg-gray-50 p-4 dark:bg-gray-800">
+                                    <Image src={product.imageCover} className='h-52 w-full object-contain transition duration-300 hover:scale-105' width={240} height={240} alt={product.title} />
+                                </div>
+                                <CardDescription className="font-semibold text-emerald-600">{product.brand.name}</CardDescription>
+                                <CardTitle className="line-clamp-1">{product.title.split(" ", 4).join(' ')}</CardTitle>
                                 <CardDescription>{product.category.name}</CardDescription>
                             </CardHeader>
 

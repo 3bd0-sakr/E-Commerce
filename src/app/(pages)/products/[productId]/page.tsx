@@ -14,9 +14,11 @@ import MyStar from '@/components/myStar/page';
 import Carusor from '@/components/carusor/page';
 import AddToCart from '@/components/addToCart/page';
 
+export const dynamic = 'force-dynamic'
+
 //api
 export default async function ProductDetails({ params }: { params: Params }) {
-    let { productId } = await params
+    const { productId } = await params
     // console.log(productId);
     const response = await fetch('https://ecommerce.routemisr.com/api/v1/products/' + productId)
     const { data: product }: { data: ProductI } = await response.json()
@@ -24,15 +26,15 @@ export default async function ProductDetails({ params }: { params: Params }) {
 
     return <>
 
-        <Card className='grid md:grid-cols-2 items-center w-3/4 mx-auto mt-8'>
+        <Card className='mx-auto mt-8 grid max-w-5xl items-center overflow-hidden border-0 bg-white shadow-xl dark:bg-gray-900 md:grid-cols-2'>
             <div>
                 <Carusor images={product.images} title={product.title}/>
             </div>
             <div>
                 <CardHeader>
-                    <CardDescription>{product.brand.name}</CardDescription>
-                    <CardTitle>{product.title}</CardTitle>
-                    <CardDescription>{product.description}</CardDescription>
+                    <CardDescription className="font-semibold text-emerald-600">{product.brand.name}</CardDescription>
+                    <CardTitle className="text-3xl font-black">{product.title}</CardTitle>
+                    <CardDescription className="leading-7">{product.description}</CardDescription>
 
                 </CardHeader>
                 <CardContent>

@@ -24,9 +24,9 @@ export default function Checkout({ cartId }: { cartId: string, }) {
     const router = useRouter()
     const { setCartData } = useContext(CartContext);
 
-    let detailsInput = useRef<HTMLInputElement | null>(null)
-    let cityInput = useRef<HTMLInputElement | null>(null)
-    let phoneInput = useRef<HTMLInputElement | null>(null)
+    const detailsInput = useRef<HTMLInputElement | null>(null)
+    const cityInput = useRef<HTMLInputElement | null>(null)
+    const phoneInput = useRef<HTMLInputElement | null>(null)
 
     //online orders
     async function checkOutSession() {
@@ -36,7 +36,8 @@ export default function Checkout({ cartId }: { cartId: string, }) {
             phone: phoneInput.current?.value,
             city: cityInput.current?.value
         }
-        const response = await fetch(`https://ecommerce.routemisr.com/api/v1/orders/checkout-session/${cartId}?url=http://localhost:3000`, {
+        const checkoutUrl = typeof window !== 'undefined' ? window.location.origin : ''
+        const response = await fetch(`https://ecommerce.routemisr.com/api/v1/orders/checkout-session/${cartId}?url=${checkoutUrl}`, {
             method: 'POST',
             body: JSON.stringify({ shippingAddress }),
             headers: {

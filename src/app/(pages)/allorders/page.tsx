@@ -1,10 +1,11 @@
 "use client";
 import OrderItemsDropdown from "@/components/dropItem/page";
+import { Order } from "@/interfaces";
 import { Loader } from "lucide-react";
 import React, { useEffect, useState } from "react";
-
+import Reveal from '@/components/Reveal/Reveal';
 export default function AllOrders() {
-    const [orders, setOrders] = useState<any[]>([]);
+    const [orders, setOrders] = useState<Order[]>([]);
     const [loading, setLoading] = useState(true);
 
     async function getAllOrders() {
@@ -20,7 +21,10 @@ export default function AllOrders() {
     }
 
     useEffect(() => {
-        getAllOrders();
+        const timer = window.setTimeout(() => {
+            void getAllOrders();
+        }, 0);
+        return () => window.clearTimeout(timer);
     }, []);
 
     if (loading) return <p className="flex justify-center items-center h-screen"><Loader className="animate-spin text-9xl min-h-[75vh]" /></p>;
@@ -32,24 +36,27 @@ export default function AllOrders() {
             {orders.length === 0 && <p>No Orders Found</p>}
 
             {orders.map(order => (
-                <div key={order._id} className="shadow rounded-2xl my-4 p-6">
-                    <h2>Order # {order._id}</h2>
-                    <p>Order Date: {new Date(order.createdAt).toLocaleString()}</p>
-                    <p>
-                        Payment: {order.paymentMethodType}
-                        {order.isPaid && <span className="text-green-300"> (Paid)</span>}
-                    </p>
-                    <p>Delivered: {order.isDelivered ? "Yes" : "No"}</p>
-                    <p>Total: {order.totalOrderPrice} EGP</p>
-                    <div className="mt-2">
-                        <h3>Shipping Address</h3>
-                        <p>City: {order.shippingAddress?.city || "N/A"}</p>
-                        <p>Phone: {order.shippingAddress?.phone || "N/A"}</p>
-                        <OrderItemsDropdown order={order.cartItems} />
+                <Reveal key={order._id}>
+                    <div  className="shadow rounded-2xl my-4 p-6">
+                        <h2>Order # {order._id}</h2>
+                        <p>Order Date: {new Date(order.createdAt).toLocaleString()}</p>
+                        <p>
+                            Payment: {order.paymentMethodType}
+                            {order.isPaid && <span className="text-green-300"> (Paid)</span>}
+                        </p>
+                        <p>Delivered: {order.isDelivered ? "Yes" : "No"}</p>
+                        <p>Total: {order.totalOrderPrice} EGP</p>
+                        <div className="mt-2">
+                            <h3>Shipping Address</h3>
+                            <p>City: {order.shippingAddress?.city || "N/A"}</p>
+                            <p>Phone: {order.shippingAddress?.phone || "N/A"}</p>
+                            <OrderItemsDropdown order={order.cartItems} />
 
+                        </div>
                     </div>
-                </div>
-            ))}
-        </div>
+                </Reveal>
+            ))
+            }
+        </div >
     );
 }

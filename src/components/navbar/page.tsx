@@ -16,52 +16,61 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Badge } from "@/components/ui/badge"
 import Link from 'next/link'
-import { CarTaxiFront, HeartIcon, Loader, ShoppingCart, UserIcon } from 'lucide-react'
+import { HeartIcon, Loader, Menu, ShoppingCart, UserIcon } from 'lucide-react'
 import ShopIcon from '../shopicon/page'
 import { CartContext } from '../context/cartContext'
 import { signOut, useSession } from 'next-auth/react'
 import { WishlistContext } from '../context/wishListContext'
+import ThemeToggle from '../themeToggle/page'
+
+const navLinks = [
+  { href: '/products', label: 'Products' },
+  { href: '/brands', label: 'Brands' },
+  { href: '/categories', label: 'Categories' },
+  { href: '/allorders', label: 'All orders' },
+]
 
 export default function Navbar() {
   const session = useSession()
-  console.log(session);
   const { wishlistData, isLoading: wishlistLoading } = useContext(WishlistContext)
   const { cartData, isLoading } = useContext(CartContext)
   return <>
-    <nav className='bg-gray-50 shadow rounded p-3 text-2xl font-semibold sticky top-0 z-99'>
-      <div className="container mx-auto">
-        <div className="flex items-center justify-between">
-          <div className='flex items-center justify-center'>
+    <nav className='sticky top-0 z-50 border-b bg-white/85 p-3 font-semibold shadow-sm backdrop-blur dark:bg-gray-950/85'>
+      <div className="container mx-auto px-4">
+        <div className="flex items-center justify-between gap-4">
+          <div className='flex shrink-0 items-center justify-center'>
             <span className='pt-1'><ShopIcon /></span>
-            <h1><Link href={'/'}> Shop mart</Link></h1>
+            <h1 className='text-xl'><Link href={'/'}>ShopMart</Link></h1>
           </div>
-          <div>
+          <div className='hidden md:block'>
             <NavigationMenu>
-              <NavigationMenuList>
-                <NavigationMenuItem>
-                  <NavigationMenuLink asChild>
-                    <Link href="/products">products</Link>
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
-                  <NavigationMenuLink asChild>
-                    <Link href="/brands">Brands</Link>
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
-                  <NavigationMenuLink asChild>
-                    <Link href="/categories">Categories</Link>
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
-                  <NavigationMenuLink asChild>
-                    <Link href="/allorders">All orders</Link>
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
+              <NavigationMenuList className='gap-1 text-sm text-gray-700 dark:text-gray-200'>
+                {navLinks.map((link) => (
+                  <NavigationMenuItem key={link.href}>
+                    <NavigationMenuLink asChild>
+                      <Link href={link.href}>{link.label}</Link>
+                    </NavigationMenuLink>
+                  </NavigationMenuItem>
+                ))}
               </NavigationMenuList>
             </NavigationMenu>
           </div>
-          <div className='cursor-pointer flex'>
+          <div className='flex cursor-pointer items-center gap-3'>
+            <ThemeToggle />
+            <DropdownMenu>
+              <DropdownMenuTrigger className='rounded-full border bg-white p-2 dark:bg-gray-900 md:hidden' aria-label='Open navigation menu'>
+                <Menu className='size-5' />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align='end' className='z-999 w-48 md:hidden'>
+                <DropdownMenuLabel>Navigation</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                {navLinks.map((link) => (
+                  <Link href={link.href} key={link.href}>
+                    <DropdownMenuItem className='cursor-pointer'>{link.label}</DropdownMenuItem>
+                  </Link>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
             <DropdownMenu>
               <DropdownMenuTrigger><UserIcon className='cursor-pointer' /></DropdownMenuTrigger>
               <DropdownMenuContent className='z-999 '>
@@ -86,13 +95,13 @@ export default function Navbar() {
                 <Link href={'/cart'} className='relative'>
                   <ShoppingCart />
                   <Badge className="h-5 min-w-5 rounded-full px-1 font-mono tabular-nums absolute -top-3 start-3">
-                    {isLoading ? <Loader /> : cartData?.numOfCartItems}
+                    {isLoading ? <Loader className='size-3 animate-spin' /> : cartData?.numOfCartItems ?? 0}
                   </Badge>
                 </Link>
                 <Link href={'/wishlist'} className='relative'>
                   <HeartIcon />
                   <Badge className="h-5 min-w-5 rounded-full px-1 font-mono tabular-nums absolute -top-3 start-3">
-                    {wishlistLoading ? <Loader /> : wishlistData?.count}
+                    {wishlistLoading ? <Loader className='size-3 animate-spin' /> : wishlistData?.count ?? 0}
                   </Badge>
                 </Link>
               </div>

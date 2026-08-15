@@ -38,7 +38,10 @@ export default function WishlistContextProvider({ children }: { children: ReactN
     }
 
     useEffect(() => {
-        getWishlist();
+        const timer = window.setTimeout(() => {
+            getWishlist();
+        }, 0);
+        return () => window.clearTimeout(timer);
     }, []);
 
     return (

@@ -6,4 +6,5 @@ export * from './cart'
 export * from './login'
 export * from './wishlist'
 export * from './addrsses'
+export * from './order'
 

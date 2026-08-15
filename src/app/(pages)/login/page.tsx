@@ -27,7 +27,6 @@ export const formSchema = z.object({
 
 export default function Login() {
   const searchParams = useSearchParams()
-  console.log(searchParams.get('error'));
   const [isLoading, setIsLoading] = useState(false)
 
   //Define your form.
@@ -42,13 +41,12 @@ export default function Login() {
   //Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true)
-    const response = await signIn('credentials', {
+    await signIn('credentials', {
       email: values.email,
       password: values.password,
       callbackUrl: '/',
       redirect: true
     })
-    console.log(response)
     setIsLoading(false)
   }
 
@@ -88,7 +86,7 @@ export default function Login() {
             <Button type="submit" className="w-full mt-3 cursor-pointer">{isLoading && <Loader className="animate-spin" />}Submit</Button>
           </form>
           <div className="flex justify-between">
-            <p>If You Don't Have Account, Please! <Link href={'/register'}><span className="text-blue-600">SignUp</span></Link> </p>
+            <p>If You Don&apos;t Have Account, Please! <Link href={'/register'}><span className="text-blue-600">SignUp</span></Link> </p>
             <p><Link href={'/forgetpassword'}><span className="text-blue-600">Forget Password?</span></Link> </p>
           </div>
         </Form>

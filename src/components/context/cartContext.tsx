@@ -27,13 +27,14 @@ export default function CartContextProvider({ children }: { children: ReactNode 
 
     async function getCart() {
         setIsLoading(true)
-        const response = await fetch('http://localhost:3000/api/get-cart')
-        const data: CartResponse = await response.json()
-        setCartData(data)
-        const owner = data?.data?.cartOwner || data?.data.cartOwner || null;
-        setOwnerId(owner);
-        setOwnerId(data?.data?.cartOwner);
-        setIsLoading(false)
+        try {
+            const response = await fetch('/api/get-cart')
+            const data: CartResponse = await response.json()
+            setCartData(data)
+            setOwnerId(data?.data?.cartOwner ?? null);
+        } finally {
+            setIsLoading(false)
+        }
     }
     useEffect(() => {
         getCart();

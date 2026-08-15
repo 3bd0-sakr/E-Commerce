@@ -91,7 +91,7 @@ export default function Cart() {
 
   return (
     <>
-      {isLoading || typeof cartData?.data.products[0]?.product == 'string' ? <Loading /> : cartData?.numOfCartItems! > 0 ?
+      {isLoading || typeof cartData?.data.products[0]?.product == 'string' ? <Loading /> : (cartData?.numOfCartItems ?? 0) > 0 ?
         <div className="container mx-auto py-10">
           {/* Title */}
           <h1 className="text-3xl font-bold mb-2">Shopping Cart</h1>
@@ -157,7 +157,7 @@ export default function Cart() {
                   <span>Total</span>
                   <span>{cartData?.data.totalCartPrice} EGP</span>
                 </div>
-                <Checkout cartId={cartData?.cartId!} />
+                {cartData?.cartId && <Checkout cartId={cartData.cartId} />}
                 <Link href={'/products'}>
                   <Button variant="outline" className="w-full mt-3 bg-black text-white cursor-pointer" >Continue Shopping </Button>
                 </Link>

@@ -40,7 +40,7 @@ export default function ForgetPassword() {
     const [userEmail, setUserEmail] = useState("")
     const [formName, setFormName] = useState("email")
 
-    let searchParams = useSearchParams()
+    const searchParams = useSearchParams()
 
     const form = useForm<FormFields>({
         resolver: zodResolver(formSchema),
